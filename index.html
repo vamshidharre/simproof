@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SimProof | Simulation reports, with proof</title>
+  <meta name="description" content="SimProof checks engineering simulation files before their numbers reach a report, and traces every reported value to the file and line it came from.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+
+  <meta property="og:title" content="SimProof | Simulation reports, with proof">
+  <meta property="og:description" content="No engineering decision should rest on a simulation number that nobody can prove.">
+  <meta property="og:type" content="website">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Barlow+Semi+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="masthead">
+    <div class="wrap masthead-row">
+      <a href="#top" class="wordmark" aria-label="SimProof home">
+        <img src="./favicon.svg" alt="" width="28" height="28">
+        <span>SimProof</span>
+      </a>
+      <nav class="primary-nav" aria-label="Main">
+        <a href="#how">How it works</a>
+        <a href="#demo">Demo</a>
+        <a href="#available">Available today</a>
+        <a href="#about">About</a>
+      </nav>
+      <a href="#contact" class="button button-primary button-small">Contact us</a>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- Hero: the pulsed load from the repo's test model, and the instant the solver actually sees -->
+    <section class="hero" id="top">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <h1>A simulation can solve cleanly and still be wrong.</h1>
+          <p class="lede">
+            SimProof checks your solver files before their numbers reach a report. Every value it
+            reports is traced to the file and line it came from, and can be re-checked at any time.
+          </p>
+          <div class="actions">
+            <a href="#contact" class="button button-primary" data-interest="Early access to SimProof">Get early access</a>
+            <a href="#demo" class="button">Trace a report</a>
+          </div>
+          <p class="hero-note">Early access. Works with Ansys Mechanical and MAPDL.</p>
+        </div>
+
+        <figure class="scope" aria-labelledby="scope-title">
+          <div class="scope-head">
+            <span id="scope-title" class="scope-title">Heat Flow 2, heat flux vs time</span>
+            <span class="scope-source">ds.dat, line 63</span>
+          </div>
+
+          <svg class="scope-plot" viewBox="0 0 600 300" role="img"
+               aria-label="Load table for Heat Flow 2: zero until 0.005 s, 80 mW/mm² until 0.010 s, then zero. The static solve evaluates it at 0.012 s, where it is zero.">
+            <rect class="plot-window" x="52" y="28" width="316.8" height="222"/>
+            <text class="plot-label plot-label-minor" x="60" y="46">load step, 0 to 0.012 s</text>
+
+            <g class="plot-grid">
+              <line x1="52" y1="72.4" x2="580" y2="72.4"/>
+              <line x1="52" y1="161.2" x2="580" y2="161.2"/>
+              <line x1="184" y1="28" x2="184" y2="250"/>
+              <line x1="316" y1="28" x2="316" y2="250"/>
+              <line x1="448" y1="28" x2="448" y2="250"/>
+            </g>
+            <line class="plot-axis" x1="52" y1="250" x2="580" y2="250"/>
+            <line class="plot-axis" x1="52" y1="28" x2="52" y2="250"/>
+
+            <g class="plot-ticks">
+              <text x="44" y="254" text-anchor="end">0</text>
+              <text x="44" y="165" text-anchor="end">40</text>
+              <text x="44" y="76" text-anchor="end">80</text>
+              <text x="52" y="272" text-anchor="middle">0</text>
+              <text x="184" y="272" text-anchor="middle">0.005</text>
+              <text x="316" y="272" text-anchor="middle">0.010</text>
+              <text x="448" y="272" text-anchor="middle">0.015</text>
+              <text x="580" y="272" text-anchor="end">0.020 s</text>
+            </g>
+            <text class="plot-ticks plot-label-minor" x="14" y="20">mW/mm²</text>
+
+            <line class="plot-mean" x1="52" y1="176" x2="368.8" y2="176"/>
+            <text class="plot-label plot-label-mean" x="376" y="180">time-average 33.33</text>
+
+            <polyline class="plot-curve" points="52,250 181.36,250 184,72.4 313.36,72.4 316,250 580,250"/>
+            <text class="plot-label plot-label-minor" x="249" y="62" text-anchor="middle">peak 80.00</text>
+
+            <g class="plot-cursor" id="scope-cursor" transform="translate(368.8 0)">
+              <line x1="0" y1="28" x2="0" y2="250"/>
+              <text id="scope-cursor-label" x="8" y="96">solve, t = 0.012 s</text>
+            </g>
+            <circle class="plot-dot" id="scope-dot" cx="368.8" cy="250" r="6"/>
+          </svg>
+
+          <p class="scope-readout" aria-live="off">
+            <span>Value the solver applies</span>
+            <output id="scope-readout">0.000 mW/mm² at t = 0.0120 s</output>
+          </p>
+
+          <div class="scope-verdict" id="scope-verdict">
+            <span class="chip chip-fail">Fail</span>
+            <p>
+              The steady-state solve evaluates this load only at t&nbsp;=&nbsp;0.012&nbsp;s, where it is
+              <strong>0.000&nbsp;mW/mm²</strong>&nbsp;<button class="tag" data-ev="E7" data-jump>[E7]</button>.
+              Over the load step it averages <strong>33.33&nbsp;mW/mm²</strong>&nbsp;<button class="tag" data-ev="E8" data-jump>[E8]</button>,
+              with a peak of <strong>80.00&nbsp;mW/mm²</strong>&nbsp;<button class="tag" data-ev="E9" data-jump>[E9]</button>.
+            </p>
+          </div>
+
+          <figcaption class="scope-caption">
+            Synthetic test model from the SimProof repository, checked by <code>static_time_dependent_load</code>.
+            <button class="link-button" id="scope-replay" type="button">Replay</button>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Problem -->
+    <section class="section section-tinted" id="problem">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Most simulation errors are in the setup, not the solver</h2>
+          <p>Ansys, Abaqus and Nastran are reliable numerical tools. What usually goes wrong is what they were given.</p>
+        </div>
+
+        <div class="problem-grid">
+          <div class="problem">
+            <h3>Wrong inputs solve cleanly</h3>
+            <p>
+              A pulsed load sampled at one instant, a modulus entered in GPa in a millimetre model, a
+              missing convection face. The solver converges, the contour plot looks plausible, and the
+              number in the report is wrong.
+            </p>
+          </div>
+          <div class="problem">
+            <h3>Report numbers have no trail</h3>
+            <p>
+              Values are copied from screenshots into Word. When a customer asks two years later where a
+              stress came from, nobody can name the run, the file or the node.
+            </p>
+          </div>
+          <div class="problem">
+            <h3>Checking does not scale</h3>
+            <p>
+              AI agents and surrogate models will produce far more results than engineers can review by
+              hand. Regulators already ask for credibility evidence: the US FDA
+              <a href="https://www.fda.gov/medical-devices/medical-devices-news-and-events/webinar-assessing-credibility-computational-modeling-and-simulation-medical-device-submissions-final" target="_blank" rel="noopener">finalized its guidance</a>
+              for medical device submissions in November 2023, built on ASME V&amp;V 40.
+            </p>
+          </div>
+        </div>
+
+        <aside class="case-note">
+          <h3>The first real case</h3>
+          <p>
+            On a commercial Ansys thermal study, the <code>static_time_dependent_load</code> check found
+            steady-state models in which 5 to 7 of 10 heat loads were switched off at the solve instant.
+            The first report built on those results was wrong. The check also reported each load's cycle
+            mean, which was the correction the study needed.
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="section" id="how">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>From solver file to signed-off number</h2>
+          <p>Four steps, each one deterministic. A language model can explain a finding; it never makes one.</p>
+        </div>
+
+        <ol class="steps">
+          <li class="step">
+            <span class="step-index" aria-hidden="true">1</span>
+            <h3>Read</h3>
+            <p>
+              Readers turn input decks, solver logs and result files into one solver-neutral study. Every
+              value keeps its file, its line or node, and the file's SHA-256 fingerprint. Anything a reader
+              can't parse is listed in the report, never guessed.
+            </p>
+            <code class="step-artifact">ds.dat, solve.out, file.rth</code>
+          </li>
+          <li class="step">
+            <span class="step-index" aria-hidden="true">2</span>
+            <h3>Check</h3>
+            <p>
+              Checks are plain Python with no language model in the loop. Each has a written spec, cites the
+              sources its method rests on, and returns the evidence behind its finding.
+            </p>
+            <code class="step-artifact">static_time_dependent_load: fail</code>
+          </li>
+          <li class="step">
+            <span class="step-index" aria-hidden="true">3</span>
+            <h3>Report</h3>
+            <p>
+              The report template can only print a number together with its evidence tag. An appendix lists
+              the source file, location and fingerprint behind every tag.
+            </p>
+            <code class="step-artifact">33.33 mW/mm^2 [E8]</code>
+          </li>
+          <li class="step">
+            <span class="step-index" aria-hidden="true">4</span>
+            <h3>Verify</h3>
+            <p>
+              <code>simproof verify</code> re-reads a finished report and compares every tagged value with its
+              evidence. Edited numbers and numbers without a tag are flagged.
+            </p>
+            <code class="step-artifact">tagged_values: 10, mismatches: 0</code>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Demo -->
+    <section class="section section-tinted" id="demo">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Click a tag to see where its number came from</h2>
+          <p>
+            This is the checks table that <code>simproof report</code> wrote for the synthetic test model in the
+            SimProof repository, with its values unedited. Each tag opens its row of the evidence appendix
+            and the line of the input deck it was read from.
+          </p>
+        </div>
+
+        <div class="demo-grid">
+          <div class="pane report-pane">
+            <div class="pane-head">
+              <span class="pane-file">report.md</span>
+              <span class="pane-meta">pulsed_static: 2 pass, 3 warn, 1 fail, 1 skip</span>
+            </div>
+            <ol class="findings" id="findings"></ol>
+          </div>
+
+          <div class="pane evidence-pane" id="evidence-pane" aria-live="polite">
+            <div class="pane-head">
+              <span class="pane-file" id="ev-heading">Evidence</span>
+              <span class="pane-meta">from the report's evidence appendix</span>
+            </div>
+            <dl class="ev-record" id="ev-record"></dl>
+            <p class="ev-verify" id="ev-verify"></p>
+            <div class="deck">
+              <div class="deck-head">
+                <span>tests/fixtures/pulsed_static/ds.dat</span>
+              </div>
+              <pre class="deck-body" id="deck" tabindex="0" aria-label="Excerpt of the input deck"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MCP and CLI -->
+    <section class="section" id="assistant">
+      <div class="wrap assistant-grid">
+        <div class="assistant-copy">
+          <h2>Ask your AI assistant, get numbers with sources</h2>
+          <p>
+            SimProof runs as an MCP server, so Claude Code, Claude Desktop or any other MCP client can open a
+            study, run the checks and draft a report from values SimProof read from the files, each with its
+            tag. The same steps work from the command line without any AI at all.
+          </p>
+          <p>SimProof itself runs offline on your machine and sends nothing anywhere.</p>
+          <h3 class="tool-list-title">Tools the assistant gets</h3>
+          <ul class="tool-list">
+            <li><code>open_study</code></li>
+            <li><code>list_studies</code></li>
+            <li><code>study_summary</code></li>
+            <li><code>list_checks</code></li>
+            <li><code>run_checks</code></li>
+            <li><code>compare_studies</code></li>
+            <li><code>mesh_convergence</code></li>
+            <li><code>build_report</code></li>
+            <li><code>verify_report</code></li>
+          </ul>
+        </div>
+
+        <div class="terminal">
+          <div class="terminal-head">
+            <div class="terminal-tabs" role="tablist" aria-label="Example sessions">
+              <button role="tab" id="tab-check" aria-controls="terminal-body" aria-selected="true" data-term="check">check</button>
+              <button role="tab" id="tab-report" aria-controls="terminal-body" aria-selected="false" tabindex="-1" data-term="report">report</button>
+              <button role="tab" id="tab-verify" aria-controls="terminal-body" aria-selected="false" tabindex="-1" data-term="verify">verify</button>
+              <button role="tab" id="tab-mcp" aria-controls="terminal-body" aria-selected="false" tabindex="-1" data-term="mcp">Claude Code</button>
+            </div>
+          </div>
+          <pre class="terminal-body" id="terminal-body" role="tabpanel" aria-labelledby="tab-check" tabindex="0"></pre>
+          <div class="terminal-foot">
+            <code>claude mcp add simproof -- simproof-mcp</code>
+            <button class="link-button" type="button" data-copy="claude mcp add simproof -- simproof-mcp">Copy</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What is available now, and how to ask for more -->
+    <section class="section section-tinted" id="available">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>What SimProof does today</h2>
+          <p>
+            SimProof is in early access. Everything on this list works now. For anything else, contact us
+            and we'll send you pricing.
+          </p>
+        </div>
+
+        <dl class="spec-sheet">
+          <dt>Solver</dt>
+          <dd>Ansys Mechanical and MAPDL: input deck, solver output, .rth and .rst result files</dd>
+          <dt>Checks</dt>
+          <dd>Six deterministic checks, listed below</dd>
+          <dt>Reports</dt>
+          <dd>Markdown, with an evidence tag on every number and an appendix listing each tag's source</dd>
+          <dt>Re-checking</dt>
+          <dd><code>simproof verify</code> compares a finished report with its evidence</dd>
+          <dt>Interfaces</dt>
+          <dd>Command line, and an MCP server for Claude Code, Claude Desktop and other MCP clients</dd>
+          <dt>Where it runs</dt>
+          <dd>Offline, on your own machine</dd>
+        </dl>
+
+        <div class="checks-head">
+          <h3>Checks</h3>
+          <p>A check is marked validated once it has reproduced a hand-audited result on a real model.</p>
+        </div>
+        <div class="table-scroll">
+          <table class="check-table">
+            <thead>
+              <tr><th scope="col">Check</th><th scope="col">What it catches</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Time-varying loads in a static solve<code>static_time_dependent_load</code></th>
+                <td>A steady-state solve that evaluates pulsed or cyclic load tables at one instant instead of over the cycle.</td>
+                <td><span class="state state-validated">Validated</span></td>
+              </tr>
+              <tr>
+                <th scope="row">Global conservation<code>global_balance</code></th>
+                <td>Heat or force in does not equal heat or force out: missing or double-counted loads, loads on the wrong faces, unconverged solutions.</td>
+                <td><span class="state state-validated">Validated</span></td>
+              </tr>
+              <tr>
+                <th scope="row">Mesh convergence<code>mesh_convergence</code></th>
+                <td>A result that would still change on a finer mesh, measured with the Grid Convergence Index across two or three meshes.</td>
+                <td><span class="state state-validated">Validated</span></td>
+              </tr>
+              <tr>
+                <th scope="row">Solver errors and warnings<code>solver_messages</code></th>
+                <td>Runs that reported errors, and warnings nobody has reviewed.</td>
+                <td><span class="state">Implemented</span></td>
+              </tr>
+              <tr>
+                <th scope="row">Unit system known<code>unit_system</code></th>
+                <td>Models whose unit system or temperature scale can't be determined, so no number can be given a trustworthy unit.</td>
+                <td><span class="state">Implemented</span></td>
+              </tr>
+              <tr>
+                <th scope="row">Result fields read<code>results_available</code></th>
+                <td>Studies whose result files are missing or unreadable, so nothing about the results can be reported.</td>
+                <td><span class="state">Implemented</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="more-offer">
+          <div>
+            <h3>Need something that isn't on this list?</h3>
+            <p>
+              We can check one of your studies for you, support another solver, produce Word or PDF reports,
+              write checks for your company's standards, or set SimProof up for your team. Tell us what you
+              need and we'll send you pricing.
+            </p>
+          </div>
+          <a href="#contact" class="button button-primary" data-interest="Pricing for extra features">Contact us for pricing</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section class="section" id="about">
+      <div class="wrap about-grid">
+        <h2>Who builds it</h2>
+        <div class="about-copy">
+          <p>
+            SimProof is built by Vamshidhar Reddy (M.Sc. Computational Engineering, FAU Erlangen-Nürnberg),
+            who has worked on FEA and NVH simulation automation at Mercedes-Benz AG and Valeo.
+          </p>
+          <p>
+            After building neural surrogate models, structural dynamics solvers and automated simulation
+            pipelines, Vamshidhar started SimProof because faster simulation needs independent checking to
+            keep up.
+          </p>
+          <p class="about-links">
+            <a href="https://www.linkedin.com/in/vamshidhar-reddy-eng/" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="https://github.com/vamshidharre" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://vamshidhar-portfolio.netlify.app/" target="_blank" rel="noopener">Portfolio</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section section-tinted" id="contact">
+      <div class="wrap contact-grid">
+        <div class="section-head">
+          <h2>Contact us</h2>
+          <p>
+            Ask for early access, have us check one of your studies, or tell us which features you need and
+            we'll send you pricing.
+          </p>
+          <p>Sending opens your email app with the request filled in; nothing is stored on this site.</p>
+          <p class="contact-direct">Or write directly to <a href="mailto:vamshidharreddye@gmail.com">vamshidharreddye@gmail.com</a>.</p>
+        </div>
+
+        <form class="contact-form" id="contact-form" novalidate>
+          <div class="field">
+            <label for="f-email">Work email</label>
+            <input type="email" id="f-email" name="email" autocomplete="email" required placeholder="name@company.com">
+            <p class="field-error" id="f-email-error" hidden>Enter an email address so we can reply.</p>
+          </div>
+          <div class="field">
+            <label for="f-company">Company <span class="optional">(optional)</span></label>
+            <input type="text" id="f-company" name="company" autocomplete="organization">
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="f-solver">Main solver</label>
+              <select id="f-solver" name="solver">
+                <option>Ansys Mechanical / MAPDL</option>
+                <option>Abaqus</option>
+                <option>Nastran (MSC / Simcenter)</option>
+                <option>Ansys Fluent</option>
+                <option>OpenFOAM</option>
+                <option>LS-DYNA</option>
+                <option>AI surrogate models</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="f-interest">Interested in</label>
+              <select id="f-interest" name="interest">
+                <option>Early access to SimProof</option>
+                <option>A check of one of my studies</option>
+                <option>Pricing for extra features</option>
+                <option>Claude Code / MCP integration</option>
+                <option>Something else</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="f-message">What do you need? <span class="optional">(optional)</span></label>
+            <textarea id="f-message" name="message" rows="4" placeholder="Solver, analysis type, features, deadline"></textarea>
+          </div>
+          <button type="submit" class="button button-primary">Send request by email</button>
+          <p class="form-status" id="form-status" role="status"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer laid out as a drawing title block -->
+  <footer class="title-block">
+    <div class="wrap">
+      <div class="tb-grid">
+        <div class="tb-cell tb-name">
+          <span class="tb-key">Title</span>
+          <span class="wordmark wordmark-static"><img src="./favicon.svg" alt="" width="24" height="24"><span>SimProof</span></span>
+          <span class="tb-value">No engineering decision should rest on a simulation number that nobody can prove.</span>
+        </div>
+        <div class="tb-cell"><span class="tb-key">Drawn</span><span class="tb-value">Erlangen, Germany</span></div>
+        <div class="tb-cell"><span class="tb-key">Checked</span><span class="tb-value">Every number</span></div>
+        <div class="tb-cell"><span class="tb-key">Revision</span><span class="tb-value">0.1.0</span></div>
+        <div class="tb-cell"><span class="tb-key">Sheet</span><span class="tb-value">1 of 1</span></div>
+        <div class="tb-cell tb-links">
+          <span class="tb-key">Contact</span>
+          <span class="tb-value">
+            <a href="mailto:vamshidharreddye@gmail.com">Email</a>
+            <a href="https://github.com/vamshidharre" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://www.linkedin.com/in/vamshidhar-reddy-eng/" target="_blank" rel="noopener">LinkedIn</a>
+          </span>
+        </div>
+        <div class="tb-cell"><span class="tb-key">Copyright</span><span class="tb-value">© 2026 SimProof</span></div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="./app.js"></script>
+</body>
+</html>
