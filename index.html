@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SimProof | Simulation reports, with proof</title>
   <meta name="description" content="SimProof checks engineering simulation files before their numbers reach a report, and traces every reported value to the file and line it came from.">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="light">
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
 
   <meta property="og:title" content="SimProof | Simulation reports, with proof">
@@ -14,7 +14,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Barlow+Semi+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
@@ -29,10 +29,11 @@
       <nav class="primary-nav" aria-label="Main">
         <a href="#how">How it works</a>
         <a href="#demo">Demo</a>
-        <a href="#available">Available today</a>
+        <a href="#available">Checks</a>
+        <a href="#pilot">Free check</a>
         <a href="#about">About</a>
       </nav>
-      <a href="#contact" class="button button-primary button-small">Contact us</a>
+      <a href="#pilot" class="button button-primary button-small">Get a free check</a>
     </div>
   </header>
 
@@ -48,10 +49,10 @@
             reports is traced to the file and line it came from, and can be re-checked at any time.
           </p>
           <div class="actions">
-            <a href="#contact" class="button button-primary" data-interest="Early access to SimProof">Get early access</a>
-            <a href="#demo" class="button">Trace a report</a>
+            <a href="#pilot" class="button button-primary">Get a free check</a>
+            <a href="#demo" class="button">See a traced report</a>
           </div>
-          <p class="hero-note">Early access. Works with Ansys Mechanical and MAPDL.</p>
+          <p class="hero-note">Free for early users. Works with Ansys Mechanical and MAPDL.</p>
         </div>
 
         <figure class="scope" aria-labelledby="scope-title">
@@ -302,87 +303,115 @@
       </div>
     </section>
 
-    <!-- What is available now, and how to ask for more -->
-    <section class="section section-tinted" id="available">
+    <!-- What works today -->
+    <section class="section" id="available">
       <div class="wrap">
         <div class="section-head">
-          <h2>What SimProof does today</h2>
+          <h2>What SimProof checks today</h2>
           <p>
-            SimProof is in early access. Everything on this list works now. For anything else, contact us
-            and we'll send you pricing.
+            32 deterministic checks, grouped by where a mistake enters a study. Each one has a written spec
+            and names the sources its method rests on. A check is marked validated once it has given the
+            expected result on real solver output.
           </p>
         </div>
 
         <dl class="spec-sheet">
-          <dt>Solver</dt>
-          <dd>Ansys Mechanical and MAPDL: input deck, solver output, .rth and .rst result files</dd>
-          <dt>Checks</dt>
-          <dd>Six deterministic checks, listed below</dd>
+          <dt>Solvers</dt>
+          <dd>Ansys Mechanical and MAPDL: input deck, solver output, .rth and .rst result files. Nastran and Abaqus input decks: early support.</dd>
+          <dt>Analyses</dt>
+          <dd>Static structural, steady-state and transient thermal, modal</dd>
           <dt>Reports</dt>
-          <dd>Markdown, with an evidence tag on every number and an appendix listing each tag's source</dd>
+          <dd>Markdown, Word and PDF, with an evidence tag on every number and an appendix listing each tag's source</dd>
           <dt>Re-checking</dt>
-          <dd><code>simproof verify</code> compares a finished report with its evidence</dd>
+          <dd><code>simproof verify</code> compares a finished report with its evidence; <code>simproof reverify</code> reads the solver files again</dd>
           <dt>Interfaces</dt>
           <dd>Command line, and an MCP server for Claude Code, Claude Desktop and other MCP clients</dd>
           <dt>Where it runs</dt>
-          <dd>Offline, on your own machine</dd>
+          <dd>Offline. Nothing is sent anywhere.</dd>
         </dl>
 
-        <div class="checks-head">
-          <h3>Checks</h3>
-          <p>A check is marked validated once it has reproduced a hand-audited result on a real model.</p>
+        <div class="check-groups">
+          <div class="check-group">
+            <h3>Model setup</h3>
+            <ul>
+              <li>Time-varying loads in a static solve <span class="state">Validated</span></li>
+              <li>Loads are non-zero <span class="state">Validated</span></li>
+              <li>Material constants physically possible <span class="state">Validated</span></li>
+              <li>Supports and thermal boundaries present <span class="state">Validated</span></li>
+              <li>Parts connected to supports <span class="state">Validated</span></li>
+              <li>Radiation uses an absolute-temperature offset <span class="state">Validated</span></li>
+              <li>Unit system known</li>
+              <li>Density present with inertia loads</li>
+              <li>Thermal-strain inputs</li>
+            </ul>
+          </div>
+          <div class="check-group">
+            <h3>Solver run</h3>
+            <ul>
+              <li>Solver reported convergence <span class="state">Validated</span></li>
+              <li>Requested result sets present <span class="state">Validated</span></li>
+              <li>Transient time-step resolution <span class="state">Validated</span></li>
+              <li>Transient initial condition <span class="state">Validated</span></li>
+              <li>Solver errors and warnings</li>
+              <li>Reduced-integration hourglass energy</li>
+            </ul>
+          </div>
+          <div class="check-group">
+            <h3>Physics</h3>
+            <ul>
+              <li>Energy and force balance <span class="state">Validated</span></li>
+              <li>Moment balance <span class="state">Validated</span></li>
+              <li>Strain energy against external work <span class="state">Validated</span></li>
+              <li>Steady-state thermal bounds <span class="state">Validated</span></li>
+              <li>Modal rigid-body modes and effective mass <span class="state">Validated</span></li>
+            </ul>
+          </div>
+          <div class="check-group">
+            <h3>Mesh and results</h3>
+            <ul>
+              <li>Mesh convergence (Grid Convergence Index) <span class="state">Validated</span></li>
+              <li>Results finite and consistent <span class="state">Validated</span></li>
+              <li>Temperature, stress and displacement physically possible <span class="state">Validated</span></li>
+              <li>Results against your expected values and limits <span class="state">Validated</span></li>
+              <li>Temperatures inside material tables</li>
+            </ul>
+          </div>
         </div>
-        <div class="table-scroll">
-          <table class="check-table">
-            <thead>
-              <tr><th scope="col">Check</th><th scope="col">What it catches</th><th scope="col">Status</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">Time-varying loads in a static solve<code>static_time_dependent_load</code></th>
-                <td>A steady-state solve that evaluates pulsed or cyclic load tables at one instant instead of over the cycle.</td>
-                <td><span class="state state-validated">Validated</span></td>
-              </tr>
-              <tr>
-                <th scope="row">Global conservation<code>global_balance</code></th>
-                <td>Heat or force in does not equal heat or force out: missing or double-counted loads, loads on the wrong faces, unconverged solutions.</td>
-                <td><span class="state state-validated">Validated</span></td>
-              </tr>
-              <tr>
-                <th scope="row">Mesh convergence<code>mesh_convergence</code></th>
-                <td>A result that would still change on a finer mesh, measured with the Grid Convergence Index across two or three meshes.</td>
-                <td><span class="state state-validated">Validated</span></td>
-              </tr>
-              <tr>
-                <th scope="row">Solver errors and warnings<code>solver_messages</code></th>
-                <td>Runs that reported errors, and warnings nobody has reviewed.</td>
-                <td><span class="state">Implemented</span></td>
-              </tr>
-              <tr>
-                <th scope="row">Unit system known<code>unit_system</code></th>
-                <td>Models whose unit system or temperature scale can't be determined, so no number can be given a trustworthy unit.</td>
-                <td><span class="state">Implemented</span></td>
-              </tr>
-              <tr>
-                <th scope="row">Result fields read<code>results_available</code></th>
-                <td>Studies whose result files are missing or unreadable, so nothing about the results can be reported.</td>
-                <td><span class="state">Implemented</span></td>
-              </tr>
-            </tbody>
-          </table>
+      </div>
+    </section>
+
+    <!-- Free check for early users -->
+    <section class="section section-tinted" id="pilot">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>A free check of one of your studies</h2>
+          <p>
+            We are looking for a few engineering teams to try SimProof on a real, finished study and tell us
+            honestly what they think. It costs nothing.
+          </p>
         </div>
 
-        <div class="more-offer">
-          <div>
-            <h3>Need something that isn't on this list?</h3>
-            <p>
-              We can check one of your studies for you, support another solver, produce Word or PDF reports,
-              write checks for your company's standards, or set SimProof up for your team. Tell us what you
-              need and we'll send you pricing.
-            </p>
-          </div>
-          <a href="#contact" class="button button-primary" data-interest="Pricing for extra features">Contact us for pricing</a>
-        </div>
+        <ol class="pilot-steps">
+          <li>
+            <span class="pilot-index">1</span>
+            <h3>You send three files</h3>
+            <p>The input deck, the result file and the solver output of one thermal or structural study. We sign an NDA first, or use yours.</p>
+          </li>
+          <li>
+            <span class="pilot-index">2</span>
+            <h3>We run the checks</h3>
+            <p>On our own machine, offline. Your files are not uploaded anywhere and are deleted within 7 days.</p>
+          </li>
+          <li>
+            <span class="pilot-index">3</span>
+            <h3>You get the report</h3>
+            <p>Every finding with its evidence, and a 20-minute call to go through it. In return we ask for your honest feedback.</p>
+          </li>
+        </ol>
+
+        <p class="pilot-cta">
+          <a href="#contact" class="button button-primary" data-interest="A free check of one of my studies">Ask for a free check</a>
+        </p>
       </div>
     </section>
 
@@ -410,13 +439,12 @@
     </section>
 
     <!-- Contact -->
-    <section class="section section-tinted" id="contact">
+    <section class="section" id="contact">
       <div class="wrap contact-grid">
         <div class="section-head">
           <h2>Contact us</h2>
           <p>
-            Ask for early access, have us check one of your studies, or tell us which features you need and
-            we'll send you pricing.
+            Ask for a free check of one of your studies, or tell us what you would need SimProof to do.
           </p>
           <p>Sending opens your email app with the request filled in; nothing is stored on this site.</p>
           <p class="contact-direct">Or write directly to <a href="mailto:vamshidharreddye@gmail.com">vamshidharreddye@gmail.com</a>.</p>
@@ -449,9 +477,8 @@
             <div class="field">
               <label for="f-interest">Interested in</label>
               <select id="f-interest" name="interest">
+                <option>A free check of one of my studies</option>
                 <option>Early access to SimProof</option>
-                <option>A check of one of my studies</option>
-                <option>Pricing for extra features</option>
                 <option>Claude Code / MCP integration</option>
                 <option>Something else</option>
               </select>
@@ -468,29 +495,16 @@
     </section>
   </main>
 
-  <!-- Footer laid out as a drawing title block -->
-  <footer class="title-block">
-    <div class="wrap">
-      <div class="tb-grid">
-        <div class="tb-cell tb-name">
-          <span class="tb-key">Title</span>
-          <span class="wordmark wordmark-static"><img src="./favicon.svg" alt="" width="24" height="24"><span>SimProof</span></span>
-          <span class="tb-value">No engineering decision should rest on a simulation number that nobody can prove.</span>
-        </div>
-        <div class="tb-cell"><span class="tb-key">Drawn</span><span class="tb-value">Erlangen, Germany</span></div>
-        <div class="tb-cell"><span class="tb-key">Checked</span><span class="tb-value">Every number</span></div>
-        <div class="tb-cell"><span class="tb-key">Revision</span><span class="tb-value">0.1.0</span></div>
-        <div class="tb-cell"><span class="tb-key">Sheet</span><span class="tb-value">1 of 1</span></div>
-        <div class="tb-cell tb-links">
-          <span class="tb-key">Contact</span>
-          <span class="tb-value">
-            <a href="mailto:vamshidharreddye@gmail.com">Email</a>
-            <a href="https://github.com/vamshidharre" target="_blank" rel="noopener">GitHub</a>
-            <a href="https://www.linkedin.com/in/vamshidhar-reddy-eng/" target="_blank" rel="noopener">LinkedIn</a>
-          </span>
-        </div>
-        <div class="tb-cell"><span class="tb-key">Copyright</span><span class="tb-value">© 2026 SimProof</span></div>
-      </div>
+  <footer class="site-footer">
+    <div class="wrap footer-row">
+      <span class="wordmark wordmark-static"><img src="./favicon.svg" alt="" width="22" height="22"><span>SimProof</span></span>
+      <p class="footer-line">No engineering decision should rest on a simulation number that nobody can prove.</p>
+      <nav class="footer-links" aria-label="Contact">
+        <a href="mailto:vamshidharreddye@gmail.com">Email</a>
+        <a href="https://www.linkedin.com/in/vamshidhar-reddy-eng/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/vamshidharre" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+      <p class="footer-small">&copy; 2026 SimProof &middot; Erlangen, Germany</p>
     </div>
   </footer>
 

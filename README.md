@@ -6,10 +6,10 @@ Python package (`src/`, `tests/`).
 ## Files
 
 - `index.html`: the page. Sections: hero, the problem, how it works, the traced-report demo,
-  MCP and command line, what works today (with "contact us for pricing" for anything else),
-  founder, contact.
-- `styles.css`: design tokens on `:root` (light by default, dark via `prefers-color-scheme`).
-  Type is Barlow / Barlow Semi Condensed with IBM Plex Mono for code, loaded from Google Fonts.
+  MCP and command line, the checks that work today, the free check for early users, founder,
+  contact.
+- `styles.css`: design tokens on `:root`. Light only and flat: hairline borders, no shadows.
+  Type is IBM Plex Sans with IBM Plex Mono for code, loaded from Google Fonts.
 - `app.js`: the hero animation, the clickable `[E#]` evidence demo, the terminal tabs, and the
   contact form.
 - `favicon.svg`: the logo, an evidence bracket around a check mark.
