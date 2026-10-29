@@ -928,6 +928,11 @@ dd code,
   white-space: nowrap;
 }
 
+.state.soon {
+  background: var(--tint);
+  color: var(--graphite);
+}
+
 /* Free check */
 .pilot-steps {
   list-style: none;

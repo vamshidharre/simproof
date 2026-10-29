@@ -297,7 +297,7 @@
           <pre class="terminal-body" id="terminal-body" role="tabpanel" aria-labelledby="tab-check" tabindex="0"></pre>
           <div class="terminal-foot">
             <code>claude mcp add simproof -- simproof-mcp</code>
-            <button class="link-button" type="button" data-copy="claude mcp add simproof -- simproof-mcp">Copy</button>
+            <span class="state soon">Coming later</span>
           </div>
         </div>
       </div>
@@ -317,7 +317,7 @@
 
         <dl class="spec-sheet">
           <dt>Solvers</dt>
-          <dd>Ansys Mechanical and MAPDL: input deck, solver output, .rth and .rst result files. Nastran and Abaqus input decks: early support.</dd>
+          <dd>Ansys Mechanical and MAPDL: input deck, solver output, .rth and .rst result files. Nastran, Abaqus and CalculiX input decks: early support.</dd>
           <dt>Analyses</dt>
           <dd>Static structural, steady-state and transient thermal, modal</dd>
           <dt>Reports</dt>
@@ -325,7 +325,7 @@
           <dt>Re-checking</dt>
           <dd><code>simproof verify</code> compares a finished report with its evidence; <code>simproof reverify</code> reads the solver files again</dd>
           <dt>Interfaces</dt>
-          <dd>Command line, and an MCP server for Claude Code, Claude Desktop and other MCP clients</dd>
+          <dd>Command line, and an MCP server for Claude Code, Claude Desktop and other MCP clients. Public install coming later; during the free check we run SimProof for you.</dd>
           <dt>Where it runs</dt>
           <dd>Offline. Nothing is sent anywhere.</dd>
         </dl>
@@ -359,7 +359,8 @@
           <div class="check-group">
             <h3>Physics</h3>
             <ul>
-              <li>Energy and force balance <span class="state">Validated</span></li>
+              <li>Energy and force balance (thermal; structural force loads) <span class="state">Validated</span></li>
+              <li>Force balance with pressure, gravity and rotation loads <span class="state soon">Coming soon</span></li>
               <li>Moment balance <span class="state">Validated</span></li>
               <li>Strain energy against external work <span class="state">Validated</span></li>
               <li>Steady-state thermal bounds <span class="state">Validated</span></li>

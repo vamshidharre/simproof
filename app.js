@@ -312,7 +312,8 @@ const TERMINAL = {
     dim("# A changed number shows up under mismatches; a number with no tag under untraced_values."),
   ],
   mcp: [
-    dim("# Register the SimProof MCP server with Claude Code"),
+    dim("# Coming later: SimProof is not available to install yet."),
+    dim("# During the free check we run it for you. Once released:"),
     cmd("claude mcp add simproof -- simproof-mcp"),
     "",
     dim("# Then ask in plain language, for example:"),
