@@ -529,6 +529,67 @@ dd code,
   font-size: 0.9375rem;
 }
 
+/* Pre vs Post Solve Audit Grid */
+.audit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.audit-card {
+  padding: 28px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.audit-card-badge {
+  align-self: flex-start;
+  font: 600 0.72rem/1 var(--font-code);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 5px 9px;
+  border-radius: 4px;
+  background: var(--proof-wash);
+  color: var(--proof);
+  border: 1px solid var(--proof-line);
+}
+
+.audit-card-badge.post-solve {
+  background: var(--pass-wash);
+  color: var(--pass);
+  border-color: #b7e0c9;
+}
+
+.audit-card h3 {
+  font-size: 1.15rem;
+  margin: 0;
+}
+
+.audit-card > p {
+  color: var(--graphite);
+  font-size: 0.9375rem;
+  margin: 0;
+}
+
+.audit-list {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--graphite);
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.audit-list li strong {
+  color: var(--ink);
+}
+
 /* How it works */
 .steps {
   list-style: none;
@@ -1182,6 +1243,7 @@ dd code,
     justify-content: space-between;
   }
 
+  .audit-grid,
   .problem-grid,
   .pilot-steps {
     grid-template-columns: minmax(0, 1fr);

@@ -27,6 +27,8 @@
         <span>SimProof</span>
       </a>
       <nav class="primary-nav" aria-label="Main">
+        <a href="#why">Why SimProof</a>
+        <a href="#what">What it does</a>
         <a href="#how">How it works</a>
         <a href="#demo">Demo</a>
         <a href="#available">Checks</a>
@@ -45,8 +47,9 @@
         <div class="hero-copy">
           <h1>A simulation can solve cleanly and still be wrong.</h1>
           <p class="lede">
-            SimProof checks your solver files before their numbers reach a report. Every value it
-            reports is traced to the file and line it came from, and can be re-checked at any time.
+            SimProof is an independent, automated check for FEA. It audits your setup before you solve and
+            checks forces, moments and energy balance after you solve. Every number in the report is traced to
+            the file and line it came from, and each source file is fingerprinted so later changes are detected.
           </p>
           <div class="actions">
             <a href="#pilot" class="button button-primary">Get a free check</a>
@@ -124,37 +127,38 @@
       </div>
     </section>
 
-    <!-- Problem -->
-    <section class="section section-tinted" id="problem">
+    <!-- Why SimProof / The Industrial Problem -->
+    <section class="section section-tinted" id="why">
       <div class="wrap">
         <div class="section-head">
-          <h2>Most simulation errors are in the setup, not the solver</h2>
-          <p>Ansys, Abaqus and Nastran are reliable numerical tools. What usually goes wrong is what they were given.</p>
+          <h2>Solvers compute equations. They do not validate reality.</h2>
+          <p>Ansys, Abaqus and Nastran are precision numerical tools. What usually goes wrong is what they were given—and when inputs are flawed, solvers still converge with plausible-looking results.</p>
         </div>
 
         <div class="problem-grid">
           <div class="problem">
             <h3>Wrong inputs solve cleanly</h3>
             <p>
-              A pulsed load sampled at one instant, a modulus entered in GPa in a millimetre model, a
-              missing convection face. The solver converges, the contour plot looks plausible, and the
-              number in the report is wrong.
+              A total force entered on every node instead of shared across them, a modulus entered in GPa
+              instead of MPa, an unconstrained floating part, or a pulsed load sampled at zero. The solver
+              converges, the contours look convincing, and the number in the report is wrong.
             </p>
           </div>
           <div class="problem">
             <h3>Report numbers have no trail</h3>
             <p>
-              Values are copied from screenshots into Word. When a customer asks two years later where a
-              stress came from, nobody can name the run, the file or the node.
+              Stresses and reaction forces are copied manually from screenshots into Word or Excel. When clients,
+              senior reviewers, or regulators ask years later where a number came from, nobody can name the exact
+              solver run, file, or node.
             </p>
           </div>
           <div class="problem">
-            <h3>Checking does not scale</h3>
+            <h3>Unattended confidence</h3>
             <p>
-              AI agents and surrogate models will produce far more results than engineers can review by
-              hand. Regulators already ask for credibility evidence: the US FDA
-              <a href="https://www.fda.gov/medical-devices/medical-devices-news-and-events/webinar-assessing-credibility-computational-modeling-and-simulation-medical-device-submissions-final" target="_blank" rel="noopener">finalized its guidance</a>
-              for medical device submissions in November 2023, built on ASME V&amp;V 40.
+              Engineers spend hours per study probing nodes, checking reactions by hand and building reports.
+              When every SimProof check passes, those items arrive already checked and traced, so review focuses on
+              engineering judgement. When a check fails, SimProof points to the exact line in the deck.
+              A PASS means no setup or balance error was found. It does not approve the design.
             </p>
           </div>
         </div>
@@ -162,12 +166,49 @@
         <aside class="case-note">
           <h3>The first real case</h3>
           <p>
-            On a commercial Ansys thermal study, the <code>static_time_dependent_load</code> check found
+            On a commercial Ansys thermal study, SimProof's <code>static_time_dependent_load</code> check found
             steady-state models in which 5 to 7 of 10 heat loads were switched off at the solve instant.
             The first report built on those results was wrong. The check also reported each load's cycle
             mean, which was the correction the study needed.
           </p>
         </aside>
+      </div>
+    </section>
+
+    <!-- What it does: Pre-Solve vs Post-Solve -->
+    <section class="section" id="what">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>What SimProof does: Pre-solve audit &amp; post-solve validity</h2>
+          <p>32 deterministic checks running directly on raw solver files. An algorithmic second opinion with zero LLM guesswork.</p>
+        </div>
+
+        <div class="audit-grid">
+          <div class="audit-card">
+            <span class="audit-card-badge">Pre-Solve Setup Audit</span>
+            <h3>Catch setup mistakes before using compute time</h3>
+            <p>Reads your input deck before you queue cluster time and solver licences:</p>
+            <ul class="audit-list">
+              <li><strong>Unit system:</strong> Flags models whose unit system or temperature scale cannot be determined.</li>
+              <li><strong>Zero and pulsed loads:</strong> Flags loads that are zero for the whole solve, and pulsed loads that are zero at the instant a steady solve samples them.</li>
+              <li><strong>Constraints:</strong> Detects static models with no displacement constraint, and mesh parts with no path to a support.</li>
+              <li><strong>Material values:</strong> Checks that the elastic modulus is positive, Poisson's ratio lies between &minus;1 and 0.5, and density is present when inertia loads are applied.</li>
+            </ul>
+          </div>
+
+          <div class="audit-card">
+            <span class="audit-card-badge post-solve">Post-Solve Validity Audit</span>
+            <h3>Check the physics after the solver exits</h3>
+            <p>Answers the question that matters: <em>did the solver solve the right problem?</em></p>
+            <ul class="audit-list">
+              <li><strong>Force and energy balance:</strong> Checks that applied loads match solver reactions within 1&nbsp;% (thermal loads and structural force loads today; pressure, gravity and rotation coming soon).</li>
+              <li><strong>Moment balance:</strong> Checks net moment equilibrium (&Sigma; M = 0) about the global origin.</li>
+              <li><strong>Work and strain energy:</strong> Checks that external work matches elastic strain energy (&frac12; W &asymp; U).</li>
+              <li><strong>Result set completeness:</strong> Confirms every declared load step and substep was solved, converged and stored.</li>
+              <li><strong>Stress and displacement sanity:</strong> Checks that von Mises stresses and displacements are finite and physically possible.</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
 
